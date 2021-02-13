@@ -1,4 +1,4 @@
-Crisp bread
+Crisp bread with cheese
 Carrots and Hummus
 Hardboiled eggs
 Energy bites and green tea
@@ -14,3 +14,5 @@ Pear
 Paprika
 Carrots
 Strawberries
+Apple slices with peanut butter
+Crisp bread with hummus and eggs
