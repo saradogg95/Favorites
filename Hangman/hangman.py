@@ -8,7 +8,7 @@ class Hangman:
         self.word_list = []
         self.choice = ""
         self.guessed_letters = []
-        self.guesses = 0
+        self.guesses = 8
         self.wins = 0
         self.losses = 0
         self.game_over = False
@@ -18,7 +18,7 @@ class Hangman:
         self.get_word_list()
         self.get_word()
         self.word_to_dash()
-        self.how_many_guesses()
+        # self.how_many_guesses()
 
     def reset(self):
         self.word = ""
@@ -26,6 +26,8 @@ class Hangman:
         self.word_list = []
         self.choice = ""
         self.guessed_letters = []
+        self.guesses = 8
+        self.game_over = False
 
     def get_word_list(self):
         """Gets all of the words from the word bank and appends them to a list"""
@@ -42,15 +44,17 @@ class Hangman:
         """Makes a dashed string with equivalent length to the word"""
         self.dashed_word += "-" * len(self.word)
 
-    def how_many_guesses(self):
-        self.guesses = int(input("How many guesses would you like? "))
+    # def how_many_guesses(self):
+    #     self.guesses = int(input("How many guesses would you like? "))
 
     def print_guessed_letters(self):
         print(f"\nYou have already guessed: {', '.join(str(letter) for letter in self.guessed_letters)}")
+        print(self.display_hangman())
 
     def get_choice(self):
         choice = input("Input a letter you think is in the word: ")
         self.choice = choice.lower()
+        print()
 
     def check_choice(self):
         """Checks if the guessed letter is in the word"""
@@ -82,7 +86,7 @@ class Hangman:
 
     def add_word(self):
         """Add a new word to word bank, only for winners"""
-        print("Winners get the chance to add a new word to the word bank")
+        print("Winners get the chance to add a new word to the word bank\n")
         new = input("Would you like to add a new word? y/n ")
         if new == "y":
             new_word = input("Please enter the word: ")
@@ -98,13 +102,108 @@ class Hangman:
 
     def play_again(self):
         """Asks the user if he wants to play again"""
-        play = input("\nWould you like to play again? y/n \n")
+        play = input("Would you like to play again? y/n ")
         if play.lower() == "y":
             return True
         elif play.lower() == "n":
             return False
         else:
             print("\nI'll take that as a no")
+
+    def display_hangman(self):
+        states = [
+            """
+            ----------
+            |        |
+            |        O
+            |       \|/
+            |        |
+            |       / \\
+            |
+            -
+            """,
+            """
+            ----------
+            |        |
+            |        O
+            |       \|/
+            |        |
+            |         \\
+            |
+            -
+            """,
+            """
+            ----------
+            |        |
+            |        O
+            |       \|/
+            |        |
+            |
+            |
+            -
+            """,    
+            """
+            ----------
+            |        |
+            |        O
+            |        |/
+            |        |
+            |
+            |
+            -
+            """,      
+            """
+            ----------
+            |        |
+            |        O
+            |        |
+            |        |
+            |
+            |
+            -
+            """,
+            """
+            ----------
+            |        |
+            |        O
+            |        |
+            |        
+            |
+            |
+            -
+            """,
+            """
+            ----------
+            |        |
+            |        O
+            |
+            |
+            |
+            |
+            -
+            """,
+            """
+            ----------
+            |        |
+            |
+            |
+            |
+            |
+            |
+            -
+            """,
+            """
+            ----------
+            |
+            |
+            |
+            |
+            |
+            |
+            -
+            """
+        ]
+        return states[self.guesses]
 
     def __len__(self):
         """Returns the length of the word"""
@@ -149,7 +248,7 @@ def main():
             # If the letter is in the word, the dashes are removed for that letter
             elif game.check_choice():
                 game.update_dashed()
-                # Check if this guess has revealed the entire word5
+                # Check if this guess has revealed the entire word
                 if game.check_win():
                     game.game_over = True
                     break
@@ -167,7 +266,7 @@ def main():
 
         if game.game_over:
             game.wins += 1
-            print(f"\nCongratulations! You guessed the word {game.word}")
+            print(f"\nCongratulations! You guessed the word {game.word}!\n")
             # Winners get the chance to add a new word to the word bank
             game.add_word()
         else:
@@ -175,6 +274,7 @@ def main():
             print(f"\n-- Game over -- \n\nYour word was {game.word}")
         # User gets to see his game history - wins and losses
         print(f"\nYou have won {game.wins} game(s), and lost {game.losses} game(s)")
+        print()
         game.reset()
         if not game.play_again():
             print("\nThanks for playing!\n")
