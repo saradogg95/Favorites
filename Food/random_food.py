@@ -3,15 +3,7 @@ import random
 class Food:
 
     def __init__(self):
-        self.breakfast = ""
-        self.breakfast_list = [] 
-        self.lunch = ""
-        self.lunch_list = []        
-        self.dinner = ""
-        self.dinner_list = []
-        self.snack = ""
-        self.snack_list = []
-        self.meals = []
+        self.reset()
 
     def populate_meal_lists(self):
         self.get_breakfast_list()
