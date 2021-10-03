@@ -3,11 +3,11 @@ from tabulate import tabulate
 class Launareiknir:
 
     def __init__(self, dagvinna, vakta_alag_33_timar, vakta_alag_55_timar):
-        self.dagvinnu_timar = dagvinna + 10 
-        self.neysluhle = dagvinna + 10 
-        self.vetrarorlof = dagvinna + 10
+        self.dagvinnu_timar = dagvinna
+        self.neysluhle = dagvinna
+        self.vetrarorlof = dagvinna
         self.vakta_alag_33_timar = vakta_alag_33_timar
-        self.vakta_alag_55_timar = vakta_alag_55_timar + 10
+        self.vakta_alag_55_timar = vakta_alag_55_timar
         self.dagvinna_taxti = 2256.09
         self.vakta_alag_33_taxti = 744.51
         self.vakta_alag_55_taxti = 1240.85
@@ -69,9 +69,10 @@ class Launareiknir:
 
     def reikna_fradratt(self):
         threp2_upphaed = 0
-        if self.laun <= self.threp1_max and self.laun >= 0:
+        if self.stadgreidslustofn < self.threp2_min:
+            self.threp2flag = False
             self.stadgreidsla_threp1 = self.stadgreidslustofn * self.threp1
-        elif self.laun >= self.threp2_min and self.laun < self.threp2_max:
+        elif self.stadgreidslustofn > self.threp1_max and self.laun < self.threp2_max:
             self.threp2flag = True
             self.stadgreidsla_threp1 = self.threp1_max * self.threp1
             threp2_upphaed = self.stadgreidslustofn - self.threp1_max
@@ -95,20 +96,36 @@ class Launareiknir:
         ], headers=["Laun", "Tímar", "Taxti", "Upphæð"], tablefmt="psql", numalign="center", floatfmt=(".0f", ".0f", ".2f", ".0f")))
 
     def prenta_upplysingar_um_skattathrep(self):
+        print(f"\nStaðgreiðsluskyld laun eru {self.laun:,.0f}kr en til lækkunar kemur iðgjald launþega í lífeyrissjóð {self.lifeyrissjodur:,.0f}kr. Staðgreiðslustofn er því {self.stadgreidslustofn:,.0f}kr.")
+    
         print(tabulate([
             ["Staðgreiðsluskyld laun", f"{self.laun:,.0f}kr"],
             ["Lífeyrissjóðir", f"{self.lifeyrissjodur:,.0f}kr"],
             ["Staðgreiðslustofn", f"{self.stadgreidslustofn:,.0f}kr"],
         ], tablefmt="psql", numalign="right", floatfmt=(".0f", ".0f")))
-        if not self.threp2flag:
-            print(tabulate([
-                ["Þrep 1", f"{self.threp1_max:,.0f}kr", "31,45%", f"{self.stadgreidsla_threp1:,.0f}kr"],
-            ], tablefmt="psql", numalign="right"))
-        else:
+
+        if self.threp2flag:
             print(tabulate([
                 ["Þrep 1", f"{self.threp1_max:,.0f}kr", "31,45%", f"{self.stadgreidsla_threp1:,.0f}kr"],
                 ["Þrep 2", f"{self.stadgreidslustofn-self.threp1_max:,.0f}kr", "37,95%", f"{self.stadgreidsla_threp2:,.0f}kr"]
             ], tablefmt="psql", numalign="right"))
+
+            print(tabulate([
+                ["Staðgreiðsla", f"{self.stadgreidsla_threp1 + self.stadgreidsla_threp2:,.0f}kr"],
+                ["Persónuafsláttur", f"{self.personuafslattur:,.0f}kr"]
+            ], tablefmt="psql", numalign="right"))
+
+        else:
+            print(tabulate([
+                ["Þrep 1", f"{self.threp1_max:,.0f}kr", "31,45%", f"{self.stadgreidsla_threp1:,.0f}kr"]
+            ], tablefmt="psql", numalign="right"))
+
+            print(tabulate([
+                ["Staðgreiðsla", f"{self.stadgreidsla_threp1:,.0f}kr"],
+                ["Persónuafsláttur", f"{self.personuafslattur:,.0f}kr"]
+            ], tablefmt="psql", numalign="right"))
+
+        print(f"\nStaðgreiðsla reiknast samtals {self.stadgreidsla_fyrir_skatt:,.0f}kr en persónuafsláttur til lækkunar er {self.personuafslattur:,.0f}kr. Staðgreiðsla er því {self.stadgreidsla_eftir_skatt:,.0f}kr")
 
     def prenta_upplysingar_um_fradratt(self):
         print(tabulate([
@@ -133,12 +150,11 @@ class Launareiknir:
 
 
 def main():
-    laun = Launareiknir(96, 8, 88)
+    laun = Launareiknir(90, 10, 55)
     laun.prenta_upplysingar_um_tima()
-    laun.prenta_upplysingar_um_fradratt()
     laun.prenta_upplysingar_um_skattathrep()
+    laun.prenta_upplysingar_um_fradratt()
     laun.prenta_upplysingar_um_laun()
 
 if __name__ == "__main__":
     main()
-
