@@ -125,7 +125,7 @@ class Launareiknir:
                 ["Persónuafsláttur", f"{self.personuafslattur:,.0f}kr"]
             ], tablefmt="psql", numalign="right"))
 
-        print(f"\nStaðgreiðsla reiknast samtals {self.stadgreidsla_fyrir_skatt:,.0f}kr en persónuafsláttur til lækkunar er {self.personuafslattur:,.0f}kr. Staðgreiðsla er því {self.stadgreidsla_eftir_skatt:,.0f}kr")
+        print(f"Staðgreiðsla reiknast samtals {self.stadgreidsla_fyrir_skatt:,.0f}kr en persónuafsláttur til lækkunar er {self.personuafslattur:,.0f}kr. Staðgreiðsla er því {self.stadgreidsla_eftir_skatt:,.0f}kr\n")
 
     def prenta_upplysingar_um_fradratt(self):
         print(tabulate([
