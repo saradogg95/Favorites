@@ -2,7 +2,7 @@ from tabulate import tabulate
 
 class Launareiknir:
 
-    def __init__(self, dagvinna, vakta_alag_33_timar, vakta_alag_55_timar):
+    def __init__(self, dagvinna, vakta_alag_55_timar, vakta_alag_33_timar):
         self.dagvinnu_timar = dagvinna
         self.neysluhle = dagvinna
         self.vetrarorlof = dagvinna
@@ -34,15 +34,17 @@ class Launareiknir:
         self.stadgreidslustofn = 0 # Laun - lífeyrissjóður (iðgjöldin)
         self.stadgreidsla_threp1 = 0
         self.stadgreidsla_threp2 = 0
+        self.stadgreidsla_threp3 = 0
         self.stadgreidsla_fyrir_skatt = 0
         self.stadgreidsla_eftir_skatt = 0
         self.threp1 = 0.3145
         self.threp2 = 0.3795
+        self.threp3 = 0.4625 # Þetta er bara fyrir crazy rich fólk
         self.threp2flag = False
+        self.threp3flag = False
         self.threp1_max = 349018
         self.threp2_min = 349019
         self.threp2_max = 979847
-        # self.threp3 = 0.4625 # Þetta er bara fyrir crazy rich fólk
         self.reikna()
 
     def reikna(self):
@@ -68,17 +70,22 @@ class Launareiknir:
         self.laun += self.orlof
 
     def reikna_fradratt(self):
-        threp2_upphaed = 0
+        upphaed = 0
         if self.stadgreidslustofn < self.threp2_min:
-            self.threp2flag = False
             self.stadgreidsla_threp1 = self.stadgreidslustofn * self.threp1
-        elif self.stadgreidslustofn > self.threp1_max and self.laun < self.threp2_max:
+        elif self.stadgreidslustofn > self.threp1_max and self.stadgreidslustofn < self.threp2_max:
             self.threp2flag = True
             self.stadgreidsla_threp1 = self.threp1_max * self.threp1
-            threp2_upphaed = self.stadgreidslustofn - self.threp1_max
-            self.stadgreidsla_threp2 = threp2_upphaed * self.threp2
+            upphaed = self.stadgreidslustofn - self.threp1_max
+            self.stadgreidsla_threp2 = upphaed * self.threp2
+        elif self.stadgreidslustofn > self.threp2_max:
+            self.threp3flag = True
+            self.stadgreidsla_threp1 = self.threp1_max * self.threp1
+            self.stadgreidsla_threp2 = self.threp2_max * self.threp2
+            upphaed = self.stadgreidslustofn - self.threp2_max
+            self.stadgreidsla_threp3 = upphaed * self.threp3
 
-        self.stadgreidsla_fyrir_skatt = self.stadgreidsla_threp1 + self.stadgreidsla_threp2
+        self.stadgreidsla_fyrir_skatt = self.stadgreidsla_threp1 + self.stadgreidsla_threp2 + self.stadgreidsla_threp3
         self.stadgreidsla_eftir_skatt = self.stadgreidsla_fyrir_skatt - self.personuafslattur
         self.fradrattur = self.orlof + self.lifeyrissjodur + self.felagsgjald + self.stadgreidsla_eftir_skatt
 
@@ -107,11 +114,23 @@ class Launareiknir:
         if self.threp2flag:
             print(tabulate([
                 ["Þrep 1", f"{self.threp1_max:,.0f}kr", "31,45%", f"{self.stadgreidsla_threp1:,.0f}kr"],
-                ["Þrep 2", f"{self.stadgreidslustofn-self.threp1_max:,.0f}kr", "37,95%", f"{self.stadgreidsla_threp2:,.0f}kr"]
+                ["Þrep 2", f"{self.stadgreidslustofn - self.threp1_max:,.0f}kr", "37,95%", f"{self.stadgreidsla_threp2:,.0f}kr"]
             ], tablefmt="psql", numalign="right"))
 
             print(tabulate([
                 ["Staðgreiðsla", f"{self.stadgreidsla_threp1 + self.stadgreidsla_threp2:,.0f}kr"],
+                ["Persónuafsláttur", f"{self.personuafslattur:,.0f}kr"]
+            ], tablefmt="psql", numalign="right"))
+
+        elif self.threp3flag:
+            print(tabulate([
+                ["Þrep 1", f"{self.threp1_max:,.0f}kr", "31,45%", f"{self.stadgreidsla_threp1:,.0f}kr"],
+                ["Þrep 2", f"{self.threp2_max:,.0f}kr", "37,95%", f"{self.stadgreidsla_threp2:,.0f}kr"],
+                ["Þrep 3", f"{self.stadgreidslustofn - self.threp2_max:,.0f}kr", "46,25%", f"{self.stadgreidsla_threp3:,.0f}kr"],
+            ], tablefmt="psql", numalign="right"))
+
+            print(tabulate([
+                ["Staðgreiðsla", f"{self.stadgreidsla_threp1 + self.stadgreidsla_threp2 + self.stadgreidsla_threp3:,.0f}kr"],
                 ["Persónuafsláttur", f"{self.personuafslattur:,.0f}kr"]
             ], tablefmt="psql", numalign="right"))
 
@@ -150,7 +169,7 @@ class Launareiknir:
 
 
 def main():
-    laun = Launareiknir(90, 10, 55)
+    laun = Launareiknir(93, 84, 8)
     laun.prenta_upplysingar_um_tima()
     laun.prenta_upplysingar_um_skattathrep()
     laun.prenta_upplysingar_um_fradratt()
