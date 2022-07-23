@@ -1,4 +1,5 @@
 import random
+from typing import Text
 
 class Food:
 
@@ -6,69 +7,114 @@ class Food:
         self.reset()
 
     def populate_meal_lists(self):
-        self.get_breakfast_list()
         self.get_breakfast()
-        self.get_lunch_list()
         self.get_lunch()
-        self.get_dinner_list()
         self.get_dinner()
-        self.get_snack_list()
         self.get_snack()
 
     def reset(self):
         self.breakfast = ""
-        self.breakfast_list = [] 
+        self.breakfast_list = [
+            "Kornflex",
+            "Cheerios",
+            "Hafragrautur",
+            "Special K"
+            # "Chiagrautur",
+            # "Honeynut cheerios",
+            # "Weetos",
+            # "Rice Krispies"
+        ] 
         self.lunch = ""
-        self.lunch_list = []        
+        self.lunch_list = [
+            "Grísk jógúrt með ávöxtum og múslí",
+            "Brauð með banana",
+            "Brauð með epli",
+            "Brauð með gúrku",
+            "Brauð með mysingi og banana",
+            "Grilluð ostasamloka",
+            "Ristað brauð með smjöri, osti og sultu",
+            "Ristað brauð með avocado og eggjum",
+            "Bolla með avocado og eggjum",
+            "Bolla með áleggi",
+            "Ristuð beygla með smjöri og osti",
+            "Núðlur með eggjum, brokkolí og gulrótum",
+            "Ristað brauð og hrærð egg",
+            "Tortillas",
+            "Smoothie skál",
+            "Heimagert Maikai",
+            "Kaffijógúrt með múslí"
+        ]        
         self.dinner = ""
-        self.dinner_list = []
+        self.dinner_list = [
+            "Kjúklingapasta",
+            "Pasta með rjómasósu",
+            "Pylsur",
+            "Pylsupasta",
+            "Spaghetti bolognese",
+            "Súpukássa",
+            "Tortilla pizza",
+            "Kjúklingabollur með hrísgrjónum og súrsætri sósu",
+            "Plokkfiskur með rúgbrauði",
+            "Ýsa í raspi og kartöflur",
+            "Tacos",
+            "Tortillas",
+            "Pestó pasta",
+            "Súpa",
+            "Grjónagrautur",
+            "Makkarónugrautur",
+            "Mexíkósk kjúklingasúpa",
+            "Kornflex kjúklingur",
+            "Quesadillas",
+            "Kjúklingasnitsel með kartöflum og brúnni sósu",
+            "Pizza",
+            "Ofnbakaður fiskur",
+            "Kjötbúðingur með kartöflustöppu",
+            "Fiskbúðingur með kartöflum",
+            "Bleikar bollur með kartöflum",
+            "Falafel samloka með kartöflum og grænmeti",
+            "Lazy lasagna",
+            "Ofnbakað pasta",
+            "Kjúklingaréttur",
+            "Pastaréttur",
+            "Pylsu og kartöflukássa",
+            "Pulled pork nachos",
+            "Pulled pork samloka og kartöflur"
+        ]
         self.snack = ""
-        self.snack_list = []
+        self.snack_list = [
+            "Hrökkbrauð með smjöri og osti",
+            "Hrökkbrauð með hummus og eggjum",
+            "Gulrætur og hummus",
+            "Orkukúlur og grænt te",
+            "Súkkulaði sesamstangir",
+            "Kókosstykki",
+            "Smoothie",
+            "Flatkökur",
+            "Banani",
+            "Vínber",
+            "Epli",
+            "Pera",
+            "Paprika",
+            "Jarðaber",
+            "Epli og hnetusmjör"
+        ]
         self.meals = []
 
     def make_meals(self):
         self.populate_meal_lists()
         self.get_meals()
 
-    def get_breakfast_list(self):
-        """Gets all of the meals from the breakfast file and appends them to a list"""
-        with open("breakfast.txt") as file:
-            for breakfast in file:
-                breakfast = breakfast.strip()
-                self.breakfast_list.append(breakfast)
-
     def get_breakfast(self):
         """Gets a random breakfast from the breakfast list"""
         self.breakfast += random.choice(self.breakfast_list)
-
-    def get_lunch_list(self):
-        """Gets all of the meals from the lunch file and appends them to a list"""
-        with open("lunch.txt") as file:
-            for lunch in file:
-                lunch = lunch.strip()
-                self.lunch_list.append(lunch)
 
     def get_lunch(self):
         """Gets a random lunch from the lunch list"""
         self.lunch += random.choice(self.lunch_list)
 
-    def get_dinner_list(self):
-        """Gets all of the meals from the dinner file and appends them to a list"""
-        with open("dinner.txt") as file:
-            for dinner in file:
-                dinner = dinner.strip()
-                self.dinner_list.append(dinner)
-
     def get_dinner(self):
         """Gets a random dinner from the dinner list"""
         self.dinner += random.choice(self.dinner_list)
-
-    def get_snack_list(self):
-        """Gets all of the meals from the snack file and appends them to a list"""
-        with open("snack.txt") as file:
-            for snack in file:
-                snack = snack.strip()
-                self.snack_list.append(snack)
 
     def get_snack(self):
         """Gets a random snack from the snack list"""
@@ -86,14 +132,15 @@ class Food:
         return len(self.meals)
 
     def __str__(self):
-        return f"Breakfast: {self.meals[0]}\nLunch: {self.meals[1]}\nDinner: {self.meals[2]}\nSnack: {self.meals[3]}\n"
+        return f"Morgunmatur: {self.meals[0]}\nHádegismatur: {self.meals[1]}\nKvöldmatur: {self.meals[2]}\nSnarl: {self.meals[3]}\n"
 
 
 def main():
-    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    days = ["Mánudagur", "Þriðjudagur", "Miðvikudagur", "Fimmtudagur", "Föstudagur", "Laugardagur", "Sunnudagur"]
     food = Food()
+    print()
     for day in range(1,8):
-        print(f"Day {day} - {days[day-1]}:")
+        print(f"Dagur {day} - {days[day-1]}:")
         food.make_meals()
         print(food)
         food.reset()

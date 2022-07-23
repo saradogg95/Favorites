@@ -2,7 +2,7 @@ from tabulate import tabulate
 
 class Launareiknir:
 
-    def __init__(self, dagvinna, vakta_alag_55_timar, vakta_alag_33_timar):
+    def __init__(self, dagvinna, vakta_alag_33_timar, vakta_alag_55_timar):
         self.dagvinnu_timar = dagvinna
         self.neysluhle = dagvinna
         self.vetrarorlof = dagvinna
@@ -169,7 +169,7 @@ class Launareiknir:
 
 
 def main():
-    laun = Launareiknir(93, 84, 8)
+    laun = Launareiknir(96, 6, 90)
     laun.prenta_upplysingar_um_tima()
     laun.prenta_upplysingar_um_skattathrep()
     laun.prenta_upplysingar_um_fradratt()
