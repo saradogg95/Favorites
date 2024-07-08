@@ -15,10 +15,10 @@ class Food:
     def reset(self):
         self.breakfast = ""
         self.breakfast_list = [
-            "Kornflex",
-            "Cheerios",
             "Hafragrautur",
-            "Special K"
+            # "Kornflex",
+            # "Cheerios",
+            # "Special K"
             # "Chiagrautur",
             # "Honeynut cheerios",
             # "Weetos",
@@ -78,7 +78,8 @@ class Food:
             "Pastaréttur",
             "Pylsu og kartöflukássa",
             "Pulled pork nachos",
-            "Pulled pork samloka og kartöflur"
+            "Pulled pork samloka og kartöflur",
+            "Fiskibollur og kartöflur"
         ]
         self.snack = ""
         self.snack_list = [
@@ -96,7 +97,13 @@ class Food:
             "Pera",
             "Paprika",
             "Jarðaber",
-            "Epli og hnetusmjör"
+            "Epli og hnetusmjör",
+            "Poppkex",
+            "Hnetumix",
+            "Próteinkaka og grænt te",
+            "Peanut clusters",
+            "Hafrakökur",
+            "Muffins"
         ]
         self.meals = []
 

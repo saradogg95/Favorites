@@ -2,8 +2,7 @@ import random
 
 class Envelopes:
     def __init__(self):
-        self.goal = 5050
-        self.rate = 137
+        self.goal = 505000
         self.saved = self.get_saved_from_file()
         self.number_of_envelopes_total = 100
         self.number_of_envelopes_used = self.get_number_of_envelopes_from_file()
@@ -42,9 +41,9 @@ class Envelopes:
         self.get_random_number()
         self.chosen_envelope = self.envelopes[self.random_number]
         print(f"\nEnvelope {self.chosen_envelope} has been randomly chosen!\n")
-        choice = input(f"Can you save this ${self.chosen_envelope} or ~{self.rate * self.chosen_envelope:,.0f}kr this week? y/n ")
+        choice = input(f"Can you save this {self.chosen_envelope:,.0f}00kr this week? y/n ")
         if choice == "y":
-            self.saved += self.chosen_envelope
+            self.saved += self.chosen_envelope * 100
             self.remove_used_envelope()
             self.number_of_envelopes_used += 1
             self.add_number_of_envelopes_to_file()
@@ -77,7 +76,7 @@ class Envelopes:
         return self.goal - int(self.saved)
 
     def __str__(self):
-        return f"\nStarting goal: ${self.goal} --- ~{self.rate * self.goal:,.0f}kr\nSaved so far: ${self.saved} --- ~{self.rate * self.saved:,.0f}kr\nRemaining: ${self.get_remaining()} --- ~{self.rate * self.get_remaining():,.0f}kr\n"
+        return f"\nStarting goal: {self.goal:,.0f}kr\nSaved so far: {self.saved:,.0f}kr\nRemaining: {self.get_remaining():,.0f}kr\n"
 
 if __name__ == "__main__":
    challenge = Envelopes()
